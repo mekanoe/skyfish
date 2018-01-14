@@ -3,8 +3,6 @@ package eventstream
 import (
 	"bytes"
 	"encoding/json"
-	"os"
-	"testing"
 )
 
 func getES() (es *EventStream, buf *bytes.Buffer) {
@@ -23,27 +21,4 @@ func getData(b []byte) (map[string]interface{}, error) {
 
 	data := o["data"].(map[string]interface{})
 	return data, err
-}
-
-func TestEvent(t *testing.T) {
-	es, buf := getES()
-
-	es.Event(map[string]string{"hello": "world nyaaa"})
-
-	dat, err := getData(buf.Bytes())
-	if err != nil {
-		t.Error(err)
-		return
-	}
-
-	if dat["hello"] != "world nyaaa" {
-		t.Error("data differed")
-	}
-}
-
-func TestDummyDev(t *testing.T) {
-	es := NewEventStream(os.Stdout, ESDev)
-
-	es.Event(map[string]string{"myaaa": "nyaaa"})
-
 }

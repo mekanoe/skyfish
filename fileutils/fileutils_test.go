@@ -3,15 +3,16 @@ package hashing
 import (
 	"bytes"
 	"io"
+	"io/ioutil"
 	"log"
 	"os"
 	"testing"
 )
 
 var tExe io.Reader
-var tExeSum = []byte("f0d1afb614741b8f532bb25b36076691872767f7495a837b447a985e1825d68eeffa47165db6d7274078aef4c5773cfbce2d7aaa25115d9c87350a0aabba65f0")
+var tExeSum []byte
 var tExe2 io.Reader
-var tExe2Sum = []byte("021720fc32b214e6e3c52457f965ce125e47250a6c82a8a750e08e3f53468bd0190d437e10068464aa393e03f556f71c23f430e69f6d0c2b00e2e8bbd88e11bf")
+var tExe2Sum []byte
 var tExeDiff io.Reader
 
 func TestMain(m *testing.M) {
@@ -22,9 +23,19 @@ func TestMain(m *testing.M) {
 		log.Fatalln("couldn't load test binary")
 	}
 
+	tExeSum, err = ioutil.ReadFile("../fixtures/test_files/lyyti.exe.hash")
+	if err != nil {
+		log.Fatalln("couldn't load test binary hash")
+	}
+
 	tExe2, err = os.Open("../fixtures/test_files/lyyti.2.exe")
 	if err != nil {
 		log.Fatalln("couldn't load test binary 2")
+	}
+
+	tExe2Sum, err = ioutil.ReadFile("../fixtures/test_files/lyyti.2.exe.hash")
+	if err != nil {
+		log.Fatalln("couldn't load test binary 2 hash")
 	}
 
 	tExeDiff, err = os.Open("../fixtures/test_files/lyyti.exe.bsdiff")
